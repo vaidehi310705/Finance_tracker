@@ -1,0 +1,37 @@
+Date,Item,Amount,Category,Time,Day
+1/3/2023,Chai,7,Beverage,7:00,Wednesday
+1/3/2023,Breakfast,40,Food,8:30,Wednesday
+1/3/2023,Public Transport,20,Transport,9:00,Wednesday
+1/3/2023,Lunch,150,Food,13:00,Wednesday
+1/3/2023,Snacks,30,Food,16:00,Wednesday
+1/3/2023,Mobile Recharge,200,Utilities,17:30,Wednesday
+1/3/2023,Dinner,200,Food,20:00,Wednesday
+1/3/2023,Streaming Subscription,150,Entertainment,21:00,Wednesday
+2/3/2023,Chai,7,Beverage,7:00,Thursday
+2/3/2023,Groceries,500,Shopping,10:00,Thursday
+2/3/2023,Lunch,180,Food,13:00,Thursday
+2/3/2023,Petrol,300,Transport,14:30,Thursday
+2/3/2023,Coffee,50,Beverage,15:00,Thursday
+2/3/2023,Movie Ticket,250,Entertainment,19:00,Thursday
+2/3/2023,Dinner,220,Food,21:00,Thursday
+3/3/2023,Chai,10,Beverage,7:00,Friday
+3/3/2023,Taxi,100,Transport,9:00,Friday
+3/3/2023,Electricity Bill,700,Utilities,11:00,Friday
+3/3/2023,Lunch,170,Food,13:00,Friday
+3/3/2023,Ice Cream,60,Food,15:30,Friday
+3/3/2023,Gym Membership,1000,Health,18:00,Friday
+3/3/2023,Dinner,200,Food,20:00,Friday
+4/3/2023,Breakfast,50,Food,8:00,Saturday
+4/3/2023,Shopping,800,Shopping,11:00,Saturday
+4/3/2023,Lunch,250,Food,13:00,Saturday
+4/3/2023,Coffee,50,Beverage,15:30,Saturday
+4/3/2023,Bus Ticket,30,Transport,17:00,Saturday
+4/3/2023,Concert Ticket,500,Entertainment,20:00,Saturday
+4/3/2023,Dinner,300,Food,22:00,Saturday
+5/3/2023,Chai,10,Beverage,7:30,Sunday
+5/3/2023,Breakfast,60,Food,9:00,Sunday
+5/3/2023,Grocery Shopping,600,Shopping,11:00,Sunday
+5/3/2023,Lunch,200,Food,13:00,Sunday
+5/3/2023,Salon,400,Personal Care,16:00,Sunday
+5/3/2023,Dinner,250,Food,19:30,Sunday
+5/3/2023,Online Course,800,Education,21:00,Sunday
