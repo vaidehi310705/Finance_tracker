@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'spend_analysis_page.dart';
 import 'predict.dart';
-
+import 'saving_goals_screen.dart'; 
+import 'budget_analysis_page.dart'; // ✅ Import the Budget Analysis page
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
 
-@override
+  @override
   HomePageState createState() => HomePageState();
 }
 
@@ -41,12 +42,26 @@ class HomePageState extends State<HomePage> {
                 icon: const Icon(Icons.bar_chart_rounded, color: Colors.amber),
                 label: const Text("Spend", style: TextStyle(color: Colors.white)),
               ),
-              
-              // 📈 Predict Page Button
+
+              // 📈 Predict Expenses Button
               TextButton.icon(
                 onPressed: () => _navigateToPage(Predict()),
                 icon: const Icon(Icons.trending_up_rounded, color: Colors.amber),
                 label: const Text("Predict", style: TextStyle(color: Colors.white)),
+              ),
+
+              // 🏦 Saving Goals Button
+              TextButton.icon(
+                onPressed: () => _navigateToPage(SavingGoalsScreen()),
+                icon: const Icon(Icons.savings, color: Colors.amber),
+                label: const Text("Save", style: TextStyle(color: Colors.white)),
+              ),
+
+              // 🧮 Budget Analysis (NEW Feature)
+              TextButton.icon(
+                onPressed: () => _navigateToPage(BudgetAnalysisPage()), // ✅ Add navigation
+                icon: const Icon(Icons.pie_chart, color: Colors.amber),
+                label: const Text("Budget", style: TextStyle(color: Colors.white)),
               ),
 
               // ⚙️ Settings Page Button (Placeholder)
@@ -78,11 +93,6 @@ class HomePageState extends State<HomePage> {
           ),
 
           const SizedBox(height: 20),
-
-          
-         
-            
-          
         ],
       ),
     );

@@ -10,4 +10,5 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', home, name='home'),  # Root URL to show a welcome message
     path('api/', include('tracker.urls')),  # Include tracker app URLs
+   
 ]
