@@ -28,7 +28,24 @@ class PredictState extends State<Predict> {
   String date = "";
   String message = "";
   bool isPredicting = false;
+  String selectedExpense = "";
   final Logger logger = Logger();
+
+   List<String> expenseCategories = [
+   "Groceries","Chai/Coffee","Breakfast","Lunch","Dinner","Snacks",
+   "Eating Out","Food Delivery","Bus Ticket","Train Ticket","Metro Card Recharge",
+   "Taxi/Rideshare (Uber, Ola)","Petrol/Diesel","Car Maintenance",
+   "Flight Tickets","Hotel Booking","Travel Insurance","Rental Vehicle",
+   "Electricity Bill","Water Bill","Gas Bill","Mobile Recharge","WiFi/Broadband",
+   "Rent","Maintenance Charges","Clothing","Footwear","Accessories","Electronics",
+   "Beauty Products","Home Decor","Furniture","Movie Ticket","Concert Ticket",
+   "Streaming Subscription (Netflix, Prime)","Gaming (Mobile/PC/Console)",
+   "Books & Magazines","Sports & Outdoor Activities","Club Membership",
+   "Gym Membership","Yoga/Meditation Classes","Doctor Consultation","Medicines",
+   "Health Insurance","Supplements","Therapy/Counseling","School Fees","Tuition Fees",
+   "College Fees","Online Courses","Books & Study Material","Exam Fees","Workshops/Seminars",
+   "Office Rent","Work Travel","Business Investment","Software & Tools","Freelance Payments","Employee Salaries"
+  ];
 
   Future<void> predictAndSaveExpense(String expense) async {
     try {
@@ -161,49 +178,75 @@ class PredictState extends State<Predict> {
     }
     return false; // No duplicate found
   }
-
-  Widget _buildTextField(
-    String labelText,
-    Function(String) onChanged, {
-    TextInputType keyboardType = TextInputType.text,
-  }) {
-    return Container(
-      decoration: BoxDecoration(
+Widget _buildDropdown() {
+  return DropdownButtonFormField<String>(
+    value: selectedExpense.isNotEmpty ? selectedExpense : null,
+    items: expenseCategories.map((category) {
+      return DropdownMenuItem(
+        value: category,
+        child: Text(category, style: TextStyle(color: Colors.white)), // Inside text white
+      );
+    }).toList(),
+    onChanged: (value) {
+      setState(() {
+        selectedExpense = value!;
+      });
+    },
+    dropdownColor:  Colors.blueGrey.shade900, // Dropdown background color
+    decoration: InputDecoration(
+      labelText: "Select Expense Type",
+      labelStyle: TextStyle(color: Colors.white), // Label text color
+      filled: true,
+      fillColor: Colors.blueGrey.shade900, // Background inside dropdown (black)
+      enabledBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(12),
-        gradient: LinearGradient(
-          colors: [
-            const Color.fromARGB(65, 0, 0, 0),
-            const Color.fromARGB(65, 0, 0, 0),
-          ],
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-        ),
+        borderSide: BorderSide(color: Colors.white), // White border
       ),
-      child: TextField(
-        decoration: InputDecoration(
-          labelText: labelText,
-          labelStyle: TextStyle(
-            color: const Color.fromARGB(255, 255, 255, 255),
-          ),
-          border: InputBorder.none,
-          contentPadding: EdgeInsets.symmetric(vertical: 16, horizontal: 12),
-        ),
-        style: TextStyle(color: Colors.white),
-        keyboardType: keyboardType,
-        onChanged: onChanged,
+      focusedBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(12),
+        borderSide: BorderSide(color: Colors.blue, width: 2), // Blue border when focused
       ),
-    );
-  }
+      contentPadding: EdgeInsets.symmetric(vertical: 16, horizontal: 12),
+    ),
+    style: TextStyle(color: Colors.white), // Selected item text color
+  );
+}
+
+Widget _buildTextField(
+  String labelText,
+  Function(String) onChanged, {
+  TextInputType keyboardType = TextInputType.text,
+}) {
+  return TextField(
+    decoration: InputDecoration(
+      labelText: labelText,
+      labelStyle: TextStyle(color: Colors.white), // Placeholder text before input
+      filled: true, // White background
+      fillColor: Colors.blueGrey.shade900, // White box color
+      enabledBorder: OutlineInputBorder( // Border when not focused
+        borderRadius: BorderRadius.circular(12),
+        borderSide: BorderSide(color: Colors.white), // Black border
+      ),
+      focusedBorder: OutlineInputBorder( // Border when focused
+        borderRadius: BorderRadius.circular(12),
+        borderSide: BorderSide(color: Colors.blue, width: 2), // Blue highlight
+      ),
+      contentPadding: EdgeInsets.symmetric(vertical: 16, horizontal: 12),
+    ),
+    style: TextStyle(color: const Color.fromARGB(255, 255, 253, 253)), // User input text color
+    keyboardType: keyboardType,
+    onChanged: onChanged,
+  );
+}
+
+
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
-          icon: Icon(
-            Icons.arrow_back,
-            color: const Color.fromARGB(255, 255, 255, 255),
-          ),
+          icon: Icon(Icons.arrow_back, color: Colors.white),
           onPressed: () {
             Navigator.pop(context);
           },
@@ -222,7 +265,7 @@ class PredictState extends State<Predict> {
         padding: EdgeInsets.all(16.0),
         child: Column(
           children: [
-            _buildTextField("Enter Expense", (value) => expense = value),
+            _buildDropdown(), // Replaces the "Enter Expense" text field
             SizedBox(height: 16),
             _buildTextField(
               "Enter Amount",
@@ -233,26 +276,22 @@ class PredictState extends State<Predict> {
             _buildTextField("Date (YYYY-MM-DD)", (value) => date = value),
             SizedBox(height: 24),
             ElevatedButton(
-              onPressed:
-                  isPredicting ? null : () => predictAndSaveExpense(expense),
+              onPressed: isPredicting ? null : () => predictAndSaveExpense(selectedExpense),
               style: ElevatedButton.styleFrom(
-                backgroundColor: const Color.fromARGB(255, 0, 0, 0),
+                backgroundColor: Colors.black,
                 padding: EdgeInsets.symmetric(vertical: 16, horizontal: 32),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(40),
                 ),
-                shadowColor: const Color.fromARGB(255, 40, 40, 40),
+                shadowColor: Color.fromARGB(255, 40, 40, 40),
                 elevation: 10,
               ),
-              child:
-                  isPredicting
-                      ? CircularProgressIndicator()
-                      : Text(
-                        "Predict & Save",
-                        style: TextStyle(
-                          color: const Color.fromARGB(255, 255, 255, 255),
-                        ),
-                      ),
+              child: isPredicting
+                  ? CircularProgressIndicator()
+                  : Text(
+                      "Predict & Save",
+                      style: TextStyle(color: Colors.white),
+                    ),
             ),
             SizedBox(height: 24),
             Text(
@@ -263,7 +302,8 @@ class PredictState extends State<Predict> {
                 color: Colors.white,
               ),
             ),
-            SizedBox(height: 10),
+            
+SizedBox(height: 10),
             ElevatedButton(
               onPressed: () {
                 Navigator.push(
@@ -293,7 +333,6 @@ class PredictState extends State<Predict> {
     );
   }
 }
-
 class _ExpenseListPage extends StatefulWidget {
   @override
   _ExpenseListPageState createState() => _ExpenseListPageState();
@@ -405,4 +444,4 @@ class _ExpenseListPageState extends State<_ExpenseListPage> {
       ),
     );
   }
-}
+} 
