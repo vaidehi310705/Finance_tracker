@@ -10,7 +10,7 @@ Food Delivery,Food
 Bus Ticket,Transport
 Train Ticket,Transport
 Metro Card Recharge,Transport
-Taxi/Rideshare (Uber, Ola),Transport
+"Taxi/Rideshare (Uber, Ola)",Transport
 Petrol/Diesel,Transport
 Car Maintenance,Transport
 Flight Tickets,Travel
@@ -33,7 +33,7 @@ Home Decor,Shopping
 Furniture,Shopping
 Movie Ticket,Entertainment
 Concert Ticket,Entertainment
-Streaming Subscription (Netflix, Prime),Entertainment
+"Streaming Subscription (Netflix, Prime)",Entertainment
 Gaming (Mobile/PC/Console),Entertainment
 Books & Magazines,Entertainment
 Sports & Outdoor Activities,Entertainment

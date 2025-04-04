@@ -12,6 +12,9 @@ from django.shortcuts import render
 from django.http import JsonResponse 
 from .models import SavingGoal
 from .serializers import SavingGoalSerializer
+from rest_framework.views import APIView
+from rest_framework import status
+# pylint: disable=no-member
 
 # Expense ViewSet
 class ExpenseViewSet(viewsets.ModelViewSet):
@@ -124,15 +127,32 @@ def spend_analysis(request):
         return Response(data, status=status.HTTP_200_OK)
     except Exception as e:
         return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-
-
-
+    
 class SavingGoalViewSet(viewsets.ModelViewSet):
+    queryset = SavingGoal.objects.all()
     serializer_class = SavingGoalSerializer
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [IsAuthenticated]
+    
+class SavingGoalView(APIView):
+    def post(self, request):
+        # Your savings plan logic here (income, expenses, goal)
+        income = request.data.get("income")
+        expenses = request.data.get("expenses")
+        goal = request.data.get("goal")
 
-    def get_queryset(self):
-        return SavingGoal.objects.filter(user=self.request.user)
+        try:
+            income = float(income)
+            expenses = float(expenses)
+            goal = float(goal)
+        except:
+            return Response({"error": "Invalid input data."}, status=400)
 
-    def perform_create(self, serializer):
-        serializer.save(user=self.request.user)
+        current_savings = income - expenses
+        amount_needed = goal - current_savings
+
+        if amount_needed <= 0:
+            message = f"Great! You're already meeting your savings goal with a surplus of {abs(amount_needed)}."
+        else:
+            message = f"To reach your goal, try reducing some spending or increase income by ₹{amount_needed:.2f}."
+
+        return Response({"message": message}, status=200)

@@ -28,6 +28,4 @@ class PredictionSerializer(serializers.Serializer):
 class SavingGoalSerializer(serializers.ModelSerializer):
     class Meta:
         model = SavingGoal
-        fields = ['id', 'user', 'goal_name', 'target_amount', 'current_amount', 'deadline']
-        read_only_fields =['id','user']
-        read_only_fields = ['id', 'user']
+        fields = '__all__'

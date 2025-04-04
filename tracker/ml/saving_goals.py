@@ -1,51 +1,43 @@
 import pandas as pd
-import joblib
-from sklearn.ensemble import RandomForestRegressor
-import os
 from django.conf import settings
+import os
 
-class SavingGoals:
-    def __init__(self):
-        self.model_path = os.path.join(settings.BASE_DIR, "tracker/ml/saving_goals_model.joblib")
-        self.model = None
+def load_expenses(file_path):
+    """Load monthly expenses from a CSV file."""
+    df = os.path.join(settings.BASE_DIR, "tracker/ml/model.joblib")
+    return df
 
-        # Load model if it exists
-        if os.path.exists(self.model_path):
-            self.model = joblib.load(self.model_path)
-            print("Saving Goals Model Loaded Successfully")
+def calculate_total_expenses(df):
+    """Calculate the total monthly expenses."""
+    return df['Amount'].sum()  # Make sure your CSV has an 'Amount' column
 
-    def train(self, data, user_income):
-        # Ensure column names are stripped of whitespace
-        data.columns = data.columns.str.strip()
+def suggest_savings_plan(df, total_income, savings_goal):
+    """Suggest how the user can reach their savings goal."""
+    total_expenses = calculate_total_expenses(df)
+    current_savings = total_income - total_expenses
+    amount_needed = savings_goal - current_savings
 
-        # Check if 'Amount' column exists (Expenses)
-        if "Amount" not in data.columns:
-            raise KeyError("Dataset must contain an 'Amount' column representing expenses.")
+    if amount_needed <= 0:
+        return f"✅ Great! You're already meeting your savings goal with a surplus of ₹{abs(amount_needed):,.2f}."
 
-        # Assign values
-        data["income"] = user_income  # Set income from user input
-        data["expenses"] = data["Amount"]  # Use 'Amount' as expenses
-        data["savings_target"] = data["income"] - data["expenses"]  # Calculate savings
+    # Suggest expense reductions
+    suggestions = []
+    category_expenses = df.groupby('Category')['Amount'].sum()
 
-        # Define features (X) and target (y)
-        X = data[["income", "expenses"]]
-        y = data["savings_target"]
+    for category, amount in category_expenses.items():
+        reduction = round((amount / total_expenses) * amount_needed, 2)
+        if reduction > 0:
+            suggestions.append(f"💡 Reduce *{category}* expenses by ₹{reduction:,.2f}")
 
-        # Train model
-        self.model = RandomForestRegressor(n_estimators=100, random_state=42)
-        self.model.fit(X, y)
+    return f"💰 To reach your savings goal, consider these adjustments:\n- " + "\n- ".join(suggestions)
 
-        # Save model
-        joblib.dump(self.model, self.model_path)
-        print("Saving Goals Model Saved")
+# Example usage
+if __name__ == "__main__":
+    file_path = "expenses.csv"  # This should contain 'Category' and 'Amount' columns
+    df = os.path.join(settings.BASE_DIR, "tracker/ml/model.joblib")
 
-    def predict(self, income, expenses):
-        # Load model if not already loaded
-        if not self.model:
-            if os.path.exists(self.model_path):
-                self.model = joblib.load(self.model_path)
-            else:
-                return {"error": "Model not trained yet. Please train the model first."}
-        X_new = pd.DataFrame([[income, expenses]], columns=['income', 'expenses'])
-        predicted_savings = self.model.predict(X_new)[0]
-        return {"predicted_savings": predicted_savings}
+    total_income = float(input("Enter your monthly income: "))
+    savings_goal = float(input("Enter your desired savings goal: "))
+
+    result = suggest_savings_plan(df, total_income, savings_goal)
+    print(result)

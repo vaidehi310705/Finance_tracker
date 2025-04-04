@@ -2,6 +2,8 @@ from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 from .views import ExpenseViewSet, IncomeViewSet, TransactionViewSet, PredictExpenseCategory, get_expenses, add_expense, spend_analysis
 from .views import SavingGoalViewSet
+from .views import SavingGoalView
+
 
 
 router = DefaultRouter()
@@ -16,4 +18,8 @@ urlpatterns = [
     path('api/spend-analysis/', spend_analysis, name='spend-analysis'),
     path('api/expenses/add/', add_expense, name='add_expense'),  # Change the path here
     path('api/expenses/', get_expenses, name='get_expenses'),
+    path('api/saving-goal/', SavingGoalView.as_view(), name='saving-goal'),
+    router.register(r'saving-goals', SavingGoalViewSet, basename='savinggoal'),
+
+
 ]
